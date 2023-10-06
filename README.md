@@ -38,7 +38,7 @@
 ![ssh keys](https://github.com/alexmihalyk23/NSU-OS-22930/assets/35634279/637d4072-bcd8-47c3-8a47-c3ea84177114)
 
 
-Если при перезапуске терминала или Git Bash происходит ошибка permission denied повторите команду `ssh-add ~/.ssh/gitnsu` и затем напишите `git pull`
+
 
 3. Нажимаем на кнопку New ssh key
 4. На вашей машине открываете gitnsu.pub и копируете весь текст
@@ -47,3 +47,6 @@
 
 В папке с вашим репозиторием находится папка .git, в которой есть файл config в нем необходимо заменить строчку url
 на  git@github.com:ваше имя аккаунта/NSU-OS-22930.git
+
+
+Если при перезапуске терминала или Git Bash происходит ошибка permission denied повторите команду `ssh-add ~/.ssh/gitnsu` и затем напишите `git pull`
