@@ -9,7 +9,7 @@ main() {
     time_t now = time(NULL);
     struct tm *sp = localtime(&now);
 
-    printf("Local time (%s): ", tzname[0]);
+    printf("Local time (%d): ", atoi(tzname[0]));
     printf("%s", ctime(&now) );
 
     // California timezone is -7/-8 UTC, depending on DST
@@ -17,7 +17,7 @@ main() {
     now -= 7*3600;
     now -= (sp->tm_isdst)*3600;
 
-    printf("Time in California (-0%d): ", (7 + sp->tm_isdst));
+    printf("Time in California (%d): ", (-7 - sp->tm_isdst));
     printf("%s", ctime(&now) );
     return 0;
 }
