@@ -21,4 +21,3 @@ main() {
     printf("%s", ctime(&now) );
     return 0;
 }
-
