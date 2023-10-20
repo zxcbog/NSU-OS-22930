@@ -14,8 +14,7 @@ Node* last = NULL;
 void addNode(Node* newNode) {
     newNode->next = NULL;
     if (first == NULL) {
-        first = newNode;
-        last = newNode;
+        first = last = newNode;
     } else {
         last->next = newNode;
         last = newNode;
@@ -24,37 +23,36 @@ void addNode(Node* newNode) {
 
 void freeNodes() {
     while (first != NULL) {
-        Node* temp = first;
+        Node* current = first;
         first = first->next;
 
-        free(temp->data);
-        free(temp);
+        free(current->data);
+        free(current);
     }
 }
 
 int main() {
     char inputBuffer[BUFSIZ];
-    while (inputBuffer[0] != '.') {
-        char* result = fgets(inputBuffer, BUFSIZ - 1, stdin);
-        if (result == NULL) {
-            perror("Error while reading string");
-            exit(errno);
-        }
+
+    while (fgets(inputBuffer, BUFSIZ, stdin) != NULL) {
+        if (inputBuffer[0] == '.')
+            break;
+
         size_t length = strlen(inputBuffer);
 
         Node* newNode = (Node*)malloc(sizeof(Node));
         if (newNode == NULL) {
-            perror("Can't allocate memory\n");
+            perror("Can't allocate memory");
             exit(ENOMEM);
         }
 
-        newNode->data = malloc(length + 1);
+        newNode->data = (char*)malloc(length + 1);
         if (newNode->data == NULL) {
-            perror("Can't allocate memory\n");
+            perror("Can't allocate memory");
             exit(ENOMEM);
         }
 
-        memcpy(newNode->data, inputBuffer, length + 1);
+        strcpy(newNode->data, inputBuffer);
 
         addNode(newNode);
     }
