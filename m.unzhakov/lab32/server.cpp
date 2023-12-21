@@ -20,11 +20,14 @@ std::vector<aiocb*> all_clients_aiocbs;
 
 int print_received_data(int sig, siginfo_t* info, void* ucontext) {
     std::vector<aiocb*>* clients = (std::vector<aiocb*>*)info->si_value.sival_ptr;
-    for (int i = 0 ; i < all_clients_aiocbs.size(); i++) {
+    for (int i = 0; i < all_clients_aiocbs.size(); i++) {
         if (aio_return((*clients)[i]) > 0) {
-            
+            if (*(char*)(*clients)[i]->aio_buf == '\0') continue;
             if (*(char*)(*clients)[i]->aio_buf == '\007') {
                 printf("Client with descriptor %d has disconnected\n", (*clients)[i]->aio_fildes);
+                aio_cancel((*clients)[i]->aio_fildes, (*clients)[i]);
+                char* buffer = (char*)(*clients)[i]->aio_buf;
+                memset(buffer, 0, sizeof(strlen(buffer)));
                 close((*clients)[i]->aio_fildes);
                 (*clients)[i]->aio_fildes = -1;
                 return 1;
@@ -50,7 +53,6 @@ aiocb* create_new_aiocb(int client_descriptor) {
     new_aiocb->aio_nbytes = MAX_PACKAGE_SIZE;
     new_aiocb->aio_offset = 0;
     new_aiocb->aio_sigevent = my_sigev;
-    new_aiocb->aio_fildes = client_descriptor;
     return new_aiocb;
 }
 
